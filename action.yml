@@ -1,0 +1,11 @@
+name: "Generate Markdown Report"
+description: "Generates a markdown report of all files in the main project and test directories, including their exports, and updates .github/copilot-instructions.md if the structure has changed."
+
+inputs:
+  token:
+    description: "GitHub token"
+    required: true
+
+runs:
+  using: "node12"
+  main: "index.js"
