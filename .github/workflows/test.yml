@@ -60,3 +60,4 @@ setup(
                   if ! grep -q "## Package (js): \`sample-ts-project\`" .github/copilot-instructions.md; then
                     echo "Missing TypeScript project section"
                     exit 1
+                  fi
