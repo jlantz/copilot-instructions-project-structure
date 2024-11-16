@@ -1,2 +1,1 @@
-# copilot-instructions-project-structure
-A repository for generating markdown reports of file structures and exports
+This repository is empty. Any task executed on it should be considered a new capability and needs to be created.
