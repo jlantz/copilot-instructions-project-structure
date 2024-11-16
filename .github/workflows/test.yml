@@ -32,6 +32,17 @@ jobs:
                   echo "class SampleClass { test() {} }" > sample-js-project/index.js
                   echo "class SampleClass:\n    def test(self):\n        pass" > sample-python-project/main.py
                   echo "class SampleClass { test() {} }" > sample-ts-project/index.ts
+                  # Add package.json for JavaScript projects
+                  echo '{"name": "sample-js-project", "version": "1.0.0"}' > sample-js-project/package.json
+                  echo '{"name": "sample-ts-project", "version": "1.0.0"}' > sample-ts-project/package.json
+                  # Add setup.py for Python project
+                  echo "from setuptools import setup, find_packages
+
+setup(
+    name='sample-python-project',
+    version='1.0.0',
+    packages=find_packages(),
+)" > sample-python-project/setup.py
 
             - name: Generate Report (Sample Projects Only)
               run: node index.js "sample-js-project,sample-python-project,sample-ts-project"

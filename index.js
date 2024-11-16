@@ -37,8 +37,8 @@ function shouldIncludePath(filePath, includePaths) {
   return includePaths.some(includePath => filePath.startsWith(includePath));
 }
 
-// Modify getPackageDirectories to use PROJECT_ROOT
-function getPackageDirectories() {
+// Modify getPackageDirectories to include includePaths
+function getPackageDirectories(includePaths = []) {
   const packageDirs = [];
   const currentDir = PROJECT_ROOT;  // Changed from process.cwd()
 
@@ -71,14 +71,31 @@ function getPackageDirectories() {
     packageDirs.push(...pypackages);
   }
 
+  // Include additional paths provided via command line arguments
+  includePaths.forEach(includePath => {
+    const fullPath = path.join(PROJECT_ROOT, includePath);
+    if (fs.existsSync(fullPath)) {
+      const stats = fs.statSync(fullPath);
+      if (stats.isDirectory()) {
+        // Determine package type based on content
+        if (fs.existsSync(path.join(fullPath, 'package.json'))) {
+          packageDirs.push({ path: fullPath, type: 'js' });
+        }
+        if (fs.existsSync(path.join(fullPath, 'setup.py')) || fs.existsSync(path.join(fullPath, 'pyproject.toml'))) {
+          packageDirs.push({ path: fullPath, type: 'py' });
+        }
+      }
+    }
+  });
+
   console.log('Found packages:', packageDirs);
   return packageDirs;
 }
 
-// Modify listFilesAndExports to use PROJECT_ROOT
+// Modify listFilesAndExports to pass includePaths to getPackageDirectories
 function listFilesAndExports(dir, fileList = [], includePaths = []) {
-  // Get package directories
-  const packageDirs = getPackageDirectories();
+  // Get package directories including the specified includePaths
+  const packageDirs = getPackageDirectories(includePaths);
   console.log('Scanning directory:', dir);
   
   if (!fs.existsSync(dir)) {
@@ -365,7 +382,7 @@ function writeReportIfChanged(report) {
   }
 }
 
-// Modify main to use PROJECT_ROOT
+// Modify main to pass includePaths to getPackageDirectories
 function main() {
   try {
     const pathsArg = process.argv[2];
