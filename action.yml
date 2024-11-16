@@ -1,11 +1,22 @@
-name: "Generate Markdown Report"
-description: "Generates a markdown report of all files in the main project and test directories, including their exports, and updates .github/copilot-instructions.md if the structure has changed."
+name: "Copilot Project Structure"
+description: "Generates a project structure report in .github/copilot-instructions.md"
 
 inputs:
   token:
     description: "GitHub token"
     required: true
+  paths:
+    description: "Comma-separated list of paths to scan"
+    required: false
+  commit-directly:
+    description: "Commit changes directly to branch"
+    required: false
+    default: 'false'
+  github-token:
+    description: "GitHub token for creating PRs"
+    required: false
+    default: ${{ github.token }}
 
 runs:
-  using: "node12"
-  main: "index.js"
+  using: "node20"
+  main: "dist/index.js"

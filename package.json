@@ -1,0 +1,41 @@
+{
+  "name": "copilot-instructions-project-structure",
+  "version": "0.0.1",
+  "description": "A reusable workflow to maintain an updated project structure report in the .github/copilot-instructions.md file",
+  "main": "index.js",
+  "bin": {
+    "copilot-project-structure": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "ncc build index.js -o dist",
+    "prepare": "npm run build",
+    "precommit": "node ./bin/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jlantz/copilot-instructions-project-structure.git"
+  },
+  "keywords": [
+    "github",
+    "copilot"
+  ],
+  "author": "Jason Lantz",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/jlantz/copilot-instructions-project-structure/issues"
+  },
+  "homepage": "https://github.com/jlantz/copilot-instructions-project-structure#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "dependencies": {
+    "tree-sitter": "^0.21.1",
+    "tree-sitter-javascript": "^0.23.1",
+    "tree-sitter-python": "^0.23.4"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.1",
+    "husky": "^8.0.0"
+  }
+}

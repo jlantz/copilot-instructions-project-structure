@@ -1,3 +1,5 @@
+from .subfile import MyTest
+
 def sample_function():
     print("This is a sample function")
 
@@ -10,4 +12,4 @@ class SampleClass:
 
 sample_variable = "This is a sample variable"
 
-__all__ = ['sample_function', 'another_function', 'SampleClass', 'sample_variable']
+__all__ = ['sample_function', 'another_function', 'SampleClass', 'sample_variable', 'MyTest']

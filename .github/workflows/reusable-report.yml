@@ -1,0 +1,67 @@
+name: Reusable Project Structure Report
+
+on:
+    workflow_call:
+        inputs:
+            paths:
+                description: "Comma-separated list of paths to scan (empty for full repo)"
+                required: false
+                type: string
+            commit-directly:
+                description: "Commit updates directly to the branch instead of creating a pull request"
+                required: false
+                type: boolean
+        outputs:
+            report-updated:
+                description: "Whether the report was updated"
+                value: ${{ jobs.generate-report.outputs.updated }}
+
+jobs:
+    generate-report:
+        runs-on: ubuntu-latest
+        outputs:
+            updated: ${{ steps.check-changes.outputs.updated }}
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+
+            - name: Install Dependencies
+              run: |
+                  npm install
+                  npm rebuild tree-sitter
+
+            - name: Generate Report
+              run: node index.js "${{ inputs.paths }}"
+
+            - name: Check for Changes
+              id: check-changes
+              run: |
+                  if git diff --quiet .github/copilot-instructions.md; then
+                    echo "updated=false" >> $GITHUB_OUTPUT
+                  else
+                    echo "updated=true" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Commit Changes
+              if: steps.check-changes.outputs.updated == 'true' && inputs.commit-directly == 'true'
+              run: |
+                  git config --local user.email "github-actions[bot]@users.noreply.github.com"
+                  git config --local user.name "github-actions[bot]"
+                  git add .github/copilot-instructions.md
+                  git commit -m "Update project structure report"
+                  git push
+
+            - name: Create Pull Request
+              if: steps.check-changes.outputs.updated == 'true' && inputs.commit-directly != 'true'
+              uses: peter-evans/create-pull-request@v5
+              with:
+                  commit-message: Update project structure report
+                  title: Update project structure report
+                  body: Automated update of the project structure report
+                  branch: update-project-structure
+                  base: ${{ github.ref }}
