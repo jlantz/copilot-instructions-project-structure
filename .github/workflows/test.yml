@@ -24,15 +24,28 @@ jobs:
                   npm install
                   npm rebuild tree-sitter
 
-            - name: Generate Report (Full Repo)
-              run: node index.js
-
-            - name: Generate Report (Specific Paths)
-              run: node index.js "src,test"
-
-            - name: Verify Report
+            - name: Setup Test Projects
               run: |
-                  if [ ! -f .github/copilot-instructions.md ]; then
-                    echo "Report file not generated!"
+                  mkdir -p sample-js-project
+                  mkdir -p sample-python-project
+                  mkdir -p sample-ts-project
+                  echo "class SampleClass { test() {} }" > sample-js-project/index.js
+                  echo "class SampleClass:\n    def test(self):\n        pass" > sample-python-project/main.py
+                  echo "class SampleClass { test() {} }" > sample-ts-project/index.ts
+
+            - name: Generate Report (Sample Projects Only)
+              run: node index.js "sample-js-project,sample-python-project,sample-ts-project"
+
+            - name: Verify Report Content
+              run: |
+                  if ! grep -q "## Package (js): \`sample-js-project\`" .github/copilot-instructions.md; then
+                    echo "Missing JavaScript project section"
                     exit 1
                   fi
+                  if ! grep -q "## Package (py): \`sample-python-project\`" .github/copilot-instructions.md; then
+                    echo "Missing Python project section"
+                    exit 1
+                  fi
+                  if ! grep -q "## Package (js): \`sample-ts-project\`" .github/copilot-instructions.md; then
+                    echo "Missing TypeScript project section"
+                    exit 1
