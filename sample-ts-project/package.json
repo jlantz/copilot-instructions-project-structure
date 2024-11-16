@@ -1,0 +1,11 @@
+{
+  "name": "sample-ts-project",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.0"
+  }
+}

@@ -9,3 +9,7 @@ class SampleClass:
         print("This is a sample class")
 
 sample_variable = "This is a sample variable"
+
+from .submodule import SampleClass
+
+__all__ = ['SampleClass']

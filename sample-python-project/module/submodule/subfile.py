@@ -1,8 +1,8 @@
 class MyTest:
-    def __init__(self):
-        print
-        
-    def test(self):
-        print('This is a test')
-        
+    def test_method(self):
+        pass
+
+def test():
+    pass
+
 __all__ = ['MyTest']

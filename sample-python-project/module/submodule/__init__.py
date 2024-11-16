@@ -12,4 +12,4 @@ class SampleClass:
 
 sample_variable = "This is a sample variable"
 
-__all__ = ['sample_function', 'another_function', 'SampleClass', 'sample_variable', 'MyTest']
+__all__ = ['MyTest']

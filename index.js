@@ -47,7 +47,7 @@ function getPackageDirectories(includePaths = []) {
   if (fs.existsSync(packageJsonPath)) {
     console.log('Found package.json at:', packageJsonPath);
     packageDirs.push({ path: currentDir, type: 'js' });
-    
+
     // Look for Python packages
     const pypackages = [];
     const entries = fs.readdirSync(currentDir, { withFileTypes: true });
@@ -59,11 +59,13 @@ function getPackageDirectories(includePaths = []) {
         
         // Check for JavaScript packages
         if (fs.existsSync(path.join(subdir, 'package.json'))) {
+          console.log('Found package.json at:', path.join(subdir, 'package.json'));
           packageDirs.push({ path: subdir, type: 'js' });
         }
         
         // Check for Python packages
         if (fs.existsSync(path.join(subdir, 'setup.py')) || fs.existsSync(path.join(subdir, 'pyproject.toml'))) {
+          console.log('Found Python package at:', subdir);
           pypackages.push({ path: subdir, type: 'py' });
         }
       }
@@ -79,9 +81,11 @@ function getPackageDirectories(includePaths = []) {
       if (stats.isDirectory()) {
         // Determine package type based on content
         if (fs.existsSync(path.join(fullPath, 'package.json'))) {
+          console.log('Found package.json at:', path.join(fullPath, 'package.json'));
           packageDirs.push({ path: fullPath, type: 'js' });
         }
         if (fs.existsSync(path.join(fullPath, 'setup.py')) || fs.existsSync(path.join(fullPath, 'pyproject.toml'))) {
+          console.log('Found Python package at:', fullPath);
           packageDirs.push({ path: fullPath, type: 'py' });
         }
       }
